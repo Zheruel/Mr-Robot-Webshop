@@ -1,0 +1,38 @@
+User
+-
+UserID PK int
+Username string INDEX
+Password string
+Name string
+Surname string
+
+Product
+-
+ProductID PK int
+Name string
+SubCategoryID int FK >- SubCategory.CategoryID
+
+ProductInfo
+-
+ProductInfoID PK int
+Price decmial
+Amount int
+ProductID int FK >- Product.ProductID
+ReceiptID int FK >- Receipt.ReceiptID
+
+Receipt
+-
+ReceiptID PK int
+Status string
+FinalPrice string
+
+Category
+-
+CategoryID PK int
+CategoryName string
+
+SubCategory
+-
+SubCategoryID PK int
+SubCategoryName string
+CategoryID int FK >- Category.CategoryID
