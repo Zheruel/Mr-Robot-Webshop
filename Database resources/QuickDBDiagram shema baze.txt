@@ -1,15 +1,15 @@
-User
+WebshopUser
 -
-UserID PK int
-Username string INDEX
+WebshopUserID PK int
+Username string
 Password string
-Name string
-Surname string
+Firstname string
+Lastname string
 
 Product
 -
 ProductID PK int
-Name string
+ProductName string
 SubCategoryID int FK >- SubCategory.CategoryID
 
 ProductInfo
