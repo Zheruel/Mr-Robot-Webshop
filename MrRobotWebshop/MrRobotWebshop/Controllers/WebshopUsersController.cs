@@ -17,12 +17,19 @@ namespace MrRobotWebshop.Controllers
 
         // GET: api/WebshopUsers
         [HttpGet]
-        public IEnumerable<WebshopUser> GetWebshopUsers()
+        public IActionResult GetWebshopUsers()
         {
-            return db.WebshopUser.ToList();
+            var userList = db.WebshopUser;
+
+            if(userList.Count() == 0)
+            {
+                return NotFound("There are no users in the database");
+            }
+
+            return Ok(userList);
         }
 
-        // GET: api/WebshopUsers/5
+        // GET: api/WebshopUsers/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetWebshopUser([FromRoute] int id)
         {
@@ -35,10 +42,57 @@ namespace MrRobotWebshop.Controllers
 
             if (webshopUser == null)
             {
-                return NotFound();
+                return NotFound("There is no user with the specified ID");
             }
 
             return Ok(webshopUser);
+        }
+
+        // POST: api/WebshopUsers
+        [HttpPost]
+        public async Task<IActionResult> PostWebshopUser([FromForm] WebshopUser webshopUser)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            db.WebshopUser.Add(webshopUser);
+
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+
+            catch (DbUpdateException)
+            {
+                return new ObjectResult("Internal server error - Database related problem") { StatusCode = 500 };
+            }
+
+            return CreatedAtAction("GetWebshopUser", new { id = webshopUser.WebshopUserId }, webshopUser);
+        }
+
+        // DELETE: api/WebshopUsers/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteWebshopUser([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var webshopUser = await db.WebshopUser.FindAsync(id);
+
+            if (webshopUser == null)
+            {
+                return NotFound("There is no user with the specified ID");
+            }
+
+            db.WebshopUser.Remove(webshopUser);
+
+            await db.SaveChangesAsync();
+
+            return Ok("Korisnik je uspjesno obrisan");
         }
 
         // PUT: api/WebshopUsers/5
@@ -74,56 +128,6 @@ namespace MrRobotWebshop.Controllers
             }
 
             return NoContent();
-        }
-
-        // POST: api/WebshopUsers
-        [HttpPost]
-        public async Task<IActionResult> PostWebshopUser([FromBody] WebshopUser webshopUser)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.WebshopUser.Add(webshopUser);
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (WebshopUserExists(webshopUser.WebshopUserId))
-                {
-                    return new StatusCodeResult(StatusCodes.Status409Conflict);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetWebshopUser", new { id = webshopUser.WebshopUserId }, webshopUser);
-        }
-
-        // DELETE: api/WebshopUsers/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteWebshopUser([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var webshopUser = await db.WebshopUser.FindAsync(id);
-            if (webshopUser == null)
-            {
-                return NotFound();
-            }
-
-            db.WebshopUser.Remove(webshopUser);
-            await db.SaveChangesAsync();
-
-            return Ok(webshopUser);
         }
 
         private bool WebshopUserExists(int id)

@@ -121,7 +121,7 @@ namespace MrRobotWebshop.Models
             {
                 entity.Property(e => e.WebshopUserId)
                     .HasColumnName("WebshopUserID")
-                    .ValueGeneratedNever();
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Firstname)
                     .HasMaxLength(255)
