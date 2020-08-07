@@ -17,7 +17,7 @@ namespace MrRobotWebshop.Controllers
 
         // GET: api/WebshopUsers
         [HttpGet]
-        public IEnumerable<WebshopUser> GetWebshopUser()
+        public IEnumerable<WebshopUser> GetWebshopUsers()
         {
             return db.WebshopUser.ToList();
         }
