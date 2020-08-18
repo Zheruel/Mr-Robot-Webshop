@@ -26,6 +26,7 @@ CREATE TABLE WebshopUser (
     WebshopUserID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     Username VARCHAR(255),
     Password VARCHAR(255),
+    Salt VARCHAR(255),
     Firstname VARCHAR(255),
     Lastname VARCHAR(255)
 );

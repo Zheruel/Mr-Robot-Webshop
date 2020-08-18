@@ -4,7 +4,6 @@ drop table Product;
 drop table SubCategory;
 drop table Category;
 drop table Receipt;
-
 -- Create a new database called 'MrRobotWebshopDB'
 -- Connect to the 'master' database to run this snippet
 -- USE master
@@ -33,6 +32,7 @@ CREATE TABLE WebshopUser (
     WebshopUserID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     Username VARCHAR(255),
     Password VARCHAR(255),
+    Salt VARCHAR(255),
     Firstname VARCHAR(255),
     Lastname VARCHAR(255)
 );

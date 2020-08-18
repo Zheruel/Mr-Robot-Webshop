@@ -3,6 +3,7 @@ WebshopUser
 WebshopUserID PK int
 Username string
 Password string
+Salt string
 Firstname string
 Lastname string
 
