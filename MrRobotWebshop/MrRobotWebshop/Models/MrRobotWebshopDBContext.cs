@@ -131,6 +131,10 @@ namespace MrRobotWebshop.Models
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Salt)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Password)
                     .HasMaxLength(255)
                     .IsUnicode(false);

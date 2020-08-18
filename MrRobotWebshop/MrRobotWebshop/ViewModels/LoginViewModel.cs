@@ -1,26 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MrRobotWebshop.Models
+namespace MrRobotWebshop.ViewModels
 {
-    public partial class WebshopUser
+    public class LoginViewModel
     {
-        public int WebshopUserId { get; set; }
-
         [Required]
         public string Username { get; set; }
 
         [Required]
         public string Password { get; set; }
-
-        public string Salt { get; set; }
-
-        [Required]
-        public string Firstname { get; set; }
-
-        [Required]
-        public string Lastname { get; set; }
     }
 }

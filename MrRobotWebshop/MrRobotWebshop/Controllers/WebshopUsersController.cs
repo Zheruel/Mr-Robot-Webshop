@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MrRobotWebshop.Models;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using MrRobotWebshop.ViewModels;
+using System.Data;
+using System.Text;
 
 namespace MrRobotWebshop.Controllers
 {
@@ -49,13 +54,73 @@ namespace MrRobotWebshop.Controllers
         }
 
         // POST: api/WebshopUsers
-        [HttpPost]
-        public async Task<IActionResult> PostWebshopUser([FromForm] WebshopUser webshopUser)
+        [HttpPost("login")]
+        public IActionResult Login([FromForm] LoginViewModel loginUser)
         {
+            if (!db.WebshopUser.Any(s => s.Username == loginUser.Username))
+            {
+                return BadRequest("User doesn't exist");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            WebshopUser webShopUser = db.WebshopUser.First(s => s.Username == loginUser.Username);
+
+            //hash password
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: loginUser.Password,
+                salt: Convert.FromBase64String(webShopUser.Salt),
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+
+            if (hashed == webShopUser.Password)
+            {
+                return Ok("Login successfull");
+            }
+
+            else
+            {
+                return BadRequest("Login failed");
+            }
+        }
+
+        // POST: api/WebshopUsers
+        [HttpPost]
+        public async Task<IActionResult> PostWebshopUser([FromForm] WebshopUser webshopUser)
+        {
+            if (db.WebshopUser.Any(s => s.Username == webshopUser.Username))
+            {
+                ModelState.AddModelError(string.Empty, "Username is already taken");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // create salt
+            byte[] salt = new byte[128 / 8];
+
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+
+            //hash password
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: webshopUser.Password,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+
+            //add salt and hashes password to database
+            webshopUser.Salt = Convert.ToBase64String(salt);
+            webshopUser.Password = hashed;
 
             db.WebshopUser.Add(webshopUser);
 
