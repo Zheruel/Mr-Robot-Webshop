@@ -26,7 +26,7 @@ namespace MrRobotWebshop.Controllers
         {
             var userList = db.WebshopUser;
 
-            if(userList.Count() == 0)
+            if(!userList.Any())
             {
                 return NotFound("There are no users in the database");
             }
@@ -57,17 +57,22 @@ namespace MrRobotWebshop.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromForm] LoginViewModel loginUser)
         {
-            if (!db.WebshopUser.Any(s => s.Username == loginUser.Username))
+            WebshopUser webShopUser = new WebshopUser();
+
+            try
             {
-                return BadRequest("User doesn't exist");
+                webShopUser = db.WebshopUser.Single(s => s.Username == loginUser.Username);
+            }
+
+            catch(InvalidOperationException)
+            {
+                ModelState.AddModelError(string.Empty, "User doesn't exist");
             }
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            WebshopUser webShopUser = db.WebshopUser.First(s => s.Username == loginUser.Username);
 
             //hash password
             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(

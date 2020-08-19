@@ -34,7 +34,8 @@ CREATE TABLE WebshopUser (
 CREATE TABLE Receipt (
     ReceiptID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     Status VARCHAR(255),
-    FinalPrice VARCHAR(255)
+    FinalPrice VARCHAR(255),
+    WebshopUserID INT FOREIGN KEY REFERENCES WebshopUser(WebshopUserID)
 );
 
 CREATE TABLE Product (

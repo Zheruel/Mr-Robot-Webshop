@@ -7,6 +7,11 @@ namespace MrRobotWebshop.Models
 {
     public partial class WebshopUser
     {
+        public WebshopUser()
+        {
+            Receipt = new HashSet<Receipt>();
+        }
+
         public int WebshopUserId { get; set; }
 
         [Required]
@@ -15,6 +20,7 @@ namespace MrRobotWebshop.Models
         [Required]
         public string Password { get; set; }
 
+
         public string Salt { get; set; }
 
         [Required]
@@ -22,5 +28,7 @@ namespace MrRobotWebshop.Models
 
         [Required]
         public string Lastname { get; set; }
+
+        public ICollection<Receipt> Receipt { get; set; }
     }
 }

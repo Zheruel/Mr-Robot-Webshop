@@ -17,6 +17,19 @@ drop table Receipt;
 -- CREATE DATABASE MrRobotWebshopDB
 -- GO
 
+-- Create a new database called 'MrRobotWebshopDB'
+-- Connect to the 'master' database to run this snippet
+-- USE master
+-- GO
+-- Create the new database if it does not exist already
+-- IF NOT EXISTS (
+    -- SELECT name
+        -- FROM sys.databases
+        -- WHERE name = 'MrRobotWebshopDB'
+-- )
+-- CREATE DATABASE MrRobotWebshopDB
+-- GO
+
 CREATE TABLE Category (
     CategoryID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     CategoryName VARCHAR(255),
@@ -40,7 +53,8 @@ CREATE TABLE WebshopUser (
 CREATE TABLE Receipt (
     ReceiptID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     Status VARCHAR(255),
-    FinalPrice VARCHAR(255)
+    FinalPrice VARCHAR(255),
+    WebshopUserID INT FOREIGN KEY REFERENCES WebshopUser(WebshopUserID)
 );
 
 CREATE TABLE Product (

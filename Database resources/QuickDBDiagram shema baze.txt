@@ -26,6 +26,7 @@ Receipt
 ReceiptID PK int
 Status string
 FinalPrice string
+WebShopUserID int FK >- WebshopUser.WebshopUserID
 
 Category
 -
