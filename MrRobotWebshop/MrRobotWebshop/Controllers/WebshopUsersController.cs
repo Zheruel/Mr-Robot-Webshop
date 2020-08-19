@@ -22,9 +22,9 @@ namespace MrRobotWebshop.Controllers
 
         // GET: api/WebshopUsers
         [HttpGet]
-        public IActionResult GetWebshopUsers()
+        public async Task<IActionResult> GetWebshopUsers()
         {
-            var userList = db.WebshopUser;
+            var userList = await db.WebshopUser.ToListAsync();
 
             if(!userList.Any())
             {
@@ -55,13 +55,13 @@ namespace MrRobotWebshop.Controllers
 
         // POST: api/WebshopUsers
         [HttpPost("login")]
-        public IActionResult Login([FromForm] LoginViewModel loginUser)
+        public async Task<IActionResult> Login([FromForm] LoginViewModel loginUser)
         {
             WebshopUser webShopUser = new WebshopUser();
 
             try
             {
-                webShopUser = db.WebshopUser.Single(s => s.Username == loginUser.Username);
+                webShopUser = await db.WebshopUser.Single(s => s.Username == loginUser.Username);
             }
 
             catch(InvalidOperationException)
