@@ -3,6 +3,7 @@ WebshopUser
 WebshopUserID PK int
 Username string
 Password string
+Salt string
 Firstname string
 Lastname string
 
@@ -25,6 +26,7 @@ Receipt
 ReceiptID PK int
 Status string
 FinalPrice string
+WebShopUserID int FK >- WebshopUser.WebshopUserID
 
 Category
 -
