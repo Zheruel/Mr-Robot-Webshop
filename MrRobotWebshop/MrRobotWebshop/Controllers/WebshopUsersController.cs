@@ -61,7 +61,7 @@ namespace MrRobotWebshop.Controllers
 
             try
             {
-                webShopUser = await db.WebshopUser.Single(s => s.Username == loginUser.Username);
+                webShopUser = await db.WebshopUser.SingleAsync(s => s.Username == loginUser.Username);
             }
 
             catch(InvalidOperationException)
