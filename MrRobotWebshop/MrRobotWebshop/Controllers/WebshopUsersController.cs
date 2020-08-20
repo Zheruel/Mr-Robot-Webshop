@@ -47,7 +47,7 @@ namespace MrRobotWebshop.Controllers
 
             if (webshopUser == null)
             {
-                return NotFound("There is no user with the specified ID");
+                return NotFound("There is no such user");
             }
 
             return Ok(webshopUser);
@@ -123,7 +123,7 @@ namespace MrRobotWebshop.Controllers
                 iterationCount: 10000,
                 numBytesRequested: 256 / 8));
 
-            //add salt and hashes password to database
+            //add salt and hashed password to database
             webshopUser.Salt = Convert.ToBase64String(salt);
             webshopUser.Password = hashed;
 
@@ -146,11 +146,6 @@ namespace MrRobotWebshop.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWebshopUser([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var webshopUser = await db.WebshopUser.FindAsync(id);
 
             if (webshopUser == null)
@@ -160,24 +155,46 @@ namespace MrRobotWebshop.Controllers
 
             db.WebshopUser.Remove(webshopUser);
 
-            await db.SaveChangesAsync();
+            try
+            {
+                await db.SaveChangesAsync();
+            }
 
-            return Ok("Korisnik je uspjesno obrisan");
+            catch (DbUpdateException)
+            {
+                return new ObjectResult("Internal server error - Database related problem") { StatusCode = 500 };
+            }
+
+            return Ok("User has been deleted");
         }
 
         // PUT: api/WebshopUsers/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutWebshopUser([FromRoute] int id, [FromBody] WebshopUser webshopUser)
+        [HttpPut]
+        public async Task<IActionResult> PutWebshopUser([FromForm] WebshopUser webshopUser)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != webshopUser.WebshopUserId)
+            // create salt
+            byte[] salt = new byte[128 / 8];
+
+            using (var rng = RandomNumberGenerator.Create())
             {
-                return BadRequest();
+                rng.GetBytes(salt);
             }
+
+            //hash password
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: webshopUser.Password,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+
+            webshopUser.Salt = Convert.ToBase64String(salt);
+            webshopUser.Password = hashed;
 
             db.Entry(webshopUser).State = EntityState.Modified;
 
@@ -185,24 +202,21 @@ namespace MrRobotWebshop.Controllers
             {
                 await db.SaveChangesAsync();
             }
+
             catch (DbUpdateConcurrencyException)
             {
-                if (!WebshopUserExists(id))
+                if (!db.WebshopUser.Any(s => s.WebshopUserId == webshopUser.WebshopUserId))
                 {
-                    return NotFound();
+                    return NotFound("There is no such user");
                 }
+
                 else
                 {
                     throw;
                 }
             }
 
-            return NoContent();
-        }
-
-        private bool WebshopUserExists(int id)
-        {
-            return db.WebshopUser.Any(e => e.WebshopUserId == id);
+            return Ok("User has been modified");
         }
     }
 }
