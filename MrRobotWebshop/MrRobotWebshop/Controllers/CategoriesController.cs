@@ -13,113 +13,116 @@ namespace MrRobotWebshop.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly MrRobotWebshopDBContext _context;
-
-        public CategoriesController(MrRobotWebshopDBContext context)
-        {
-            _context = context;
-        }
+        private readonly MrRobotWebshopDBContext db = new MrRobotWebshopDBContext();
 
         // GET: api/Categories
         [HttpGet]
-        public IEnumerable<Category> GetCategory()
+        public async Task<IActionResult> GetCategories()
         {
-            return _context.Category;
+            var categoryList = await db.Category.ToListAsync();
+
+            if (!categoryList.Any())
+            {
+                return NotFound("There are no categories in the database");
+            }
+
+            return Ok(categoryList);
         }
 
-        // GET: api/Categories/5
+        // GET: api/Categories/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategory([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var category = await _context.Category.FindAsync(id);
+            var category = await db.Category.FindAsync(id);
 
             if (category == null)
             {
-                return NotFound();
+                return NotFound("There is no such category");
             }
 
             return Ok(category);
         }
 
-        // PUT: api/Categories/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory([FromRoute] int id, [FromBody] Category category)
+        // POST: api/Categories
+        [HttpPost]
+        public async Task<IActionResult> PostCategory([FromForm] Category category)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != category.CategoryId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(category).State = EntityState.Modified;
+            db.Category.Add(category);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await db.SaveChangesAsync();
             }
+
+            catch (DbUpdateException)
+            {
+                return new ObjectResult("Internal server error - Database related problem") { StatusCode = 500 };
+            }
+
+            return CreatedAtAction("GetCategory", new { id = category.CategoryId }, category);
+        }
+
+        // DELETE: api/Categories/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCategory([FromRoute] int id)
+        {
+            var category = await db.Category.FindAsync(id);
+
+            if (category == null)
+            {
+                return NotFound("There is no such category");
+            }
+
+            db.Category.Remove(category);
+
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+
+            catch (DbUpdateException)
+            {
+                return new ObjectResult("Internal server error - Database related problem") { StatusCode = 500 };
+            }
+
+            return Ok("Category deleted");
+        }
+
+        // PUT: api/Categories
+        [HttpPut]
+        public async Task<IActionResult> PutCategory([FromForm] Category category)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            db.Entry(category).State = EntityState.Modified;
+
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+
             catch (DbUpdateConcurrencyException)
             {
-                if (!CategoryExists(id))
+                if (db.Category.Any(s => s.CategoryId == category.CategoryId))
                 {
-                    return NotFound();
+                    return NotFound("There is no such category");
                 }
+
                 else
                 {
                     throw;
                 }
             }
 
-            return NoContent();
-        }
-
-        // POST: api/Categories
-        [HttpPost]
-        public async Task<IActionResult> PostCategory([FromBody] Category category)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _context.Category.Add(category);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCategory", new { id = category.CategoryId }, category);
-        }
-
-        // DELETE: api/Categories/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var category = await _context.Category.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            _context.Category.Remove(category);
-            await _context.SaveChangesAsync();
-
-            return Ok(category);
-        }
-
-        private bool CategoryExists(int id)
-        {
-            return _context.Category.Any(e => e.CategoryId == id);
+            return Ok("Category has been modified");
         }
     }
 }

@@ -1,9 +1,10 @@
-drop table WebShopUser;
 drop table ProductInfo;
 drop table Product;
 drop table SubCategory;
 drop table Category;
 drop table Receipt;
+drop table WebShopUser;
+
 -- Create a new database called 'MrRobotWebshopDB'
 -- Connect to the 'master' database to run this snippet
 -- USE master

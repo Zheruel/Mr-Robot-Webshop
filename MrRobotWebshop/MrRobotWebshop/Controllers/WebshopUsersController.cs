@@ -38,11 +38,6 @@ namespace MrRobotWebshop.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetWebshopUser([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var webshopUser = await db.WebshopUser.FindAsync(id);
 
             if (webshopUser == null)
@@ -51,46 +46,6 @@ namespace MrRobotWebshop.Controllers
             }
 
             return Ok(webshopUser);
-        }
-
-        // POST: api/WebshopUsers
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromForm] LoginViewModel loginUser)
-        {
-            WebshopUser webShopUser = new WebshopUser();
-
-            try
-            {
-                webShopUser = await db.WebshopUser.SingleAsync(s => s.Username == loginUser.Username);
-            }
-
-            catch(InvalidOperationException)
-            {
-                ModelState.AddModelError(string.Empty, "User doesn't exist");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            //hash password
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: loginUser.Password,
-                salt: Convert.FromBase64String(webShopUser.Salt),
-                prf: KeyDerivationPrf.HMACSHA1,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8));
-
-            if (hashed == webShopUser.Password)
-            {
-                return Ok("Login successfull");
-            }
-
-            else
-            {
-                return BadRequest("Login failed");
-            }
         }
 
         // POST: api/WebshopUsers
@@ -168,7 +123,7 @@ namespace MrRobotWebshop.Controllers
             return Ok("User has been deleted");
         }
 
-        // PUT: api/WebshopUsers/5
+        // PUT: api/WebshopUsers
         [HttpPut]
         public async Task<IActionResult> PutWebshopUser([FromForm] WebshopUser webshopUser)
         {
@@ -217,6 +172,46 @@ namespace MrRobotWebshop.Controllers
             }
 
             return Ok("User has been modified");
+        }
+
+        // POST: api/WebshopUsers
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromForm] LoginViewModel loginUser)
+        {
+            WebshopUser webShopUser = new WebshopUser();
+
+            try
+            {
+                webShopUser = await db.WebshopUser.SingleAsync(s => s.Username == loginUser.Username);
+            }
+
+            catch (InvalidOperationException)
+            {
+                ModelState.AddModelError(string.Empty, "User doesn't exist");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            //hash password
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: loginUser.Password,
+                salt: Convert.FromBase64String(webShopUser.Salt),
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+
+            if (hashed == webShopUser.Password)
+            {
+                return Ok("Login successfull");
+            }
+
+            else
+            {
+                return BadRequest("Login failed");
+            }
         }
     }
 }
