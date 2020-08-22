@@ -111,7 +111,7 @@ namespace MrRobotWebshop.Controllers
 
             catch (DbUpdateConcurrencyException)
             {
-                if (db.Category.Any(s => s.CategoryId == category.CategoryId))
+                if (!db.Category.Any(s => s.CategoryId == category.CategoryId))
                 {
                     return NotFound("There is no such category");
                 }
