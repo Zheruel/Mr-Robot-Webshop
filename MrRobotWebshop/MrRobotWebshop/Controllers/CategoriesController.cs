@@ -49,7 +49,7 @@ namespace MrRobotWebshop.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategory([FromRoute] int id)
         {
-            var category = await db.Category.Include(s => s.SubCategory).SingleAsync(s => s.CategoryId == id);
+            var category = await db.Category.Include(s => s.SubCategory).SingleOrDefaultAsync(s => s.CategoryId == id);
 
             if (category == null)
             {
