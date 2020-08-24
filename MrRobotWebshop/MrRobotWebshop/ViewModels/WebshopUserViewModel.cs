@@ -1,32 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace MrRobotWebshop.Models
+namespace MrRobotWebshop.ViewModels
 {
-    public partial class WebshopUser
+    public class WebshopUserViewModel
     {
-        public WebshopUser()
-        {
-            Receipt = new HashSet<Receipt>();
-        }
-
         public int WebshopUserId { get; set; }
 
-        [Required]
         public string Username { get; set; }
 
-        [Required]
         public string Password { get; set; }
 
         public string Salt { get; set; }
 
-        [Required]
         public string Firstname { get; set; }
 
-        [Required]
         public string Lastname { get; set; }
 
-        public ICollection<Receipt> Receipt { get; set; }
+        public int ReceiptCount { get; set; }
     }
 }

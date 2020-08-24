@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
-using System;
 
 namespace MrRobotWebshop.Models
 {
@@ -49,6 +50,17 @@ namespace MrRobotWebshop.Models
             {
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
+                entity.Property(e => e.ImageUrl)
+                    .HasColumnName("ImageURL")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.ProductDescription)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.ProductName)
                     .HasMaxLength(255)
                     .IsUnicode(false);
@@ -58,14 +70,15 @@ namespace MrRobotWebshop.Models
                 entity.HasOne(d => d.SubCategory)
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.SubCategoryId)
-                    .HasConstraintName("FK__Product__SubCate__7EF6D905");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Product__SubCate__23BE4960");
             });
 
             modelBuilder.Entity<ProductInfo>(entity =>
             {
                 entity.Property(e => e.ProductInfoId).HasColumnName("ProductInfoID");
 
-                entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.Discount).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
@@ -74,12 +87,14 @@ namespace MrRobotWebshop.Models
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.ProductInfo)
                     .HasForeignKey(d => d.ProductId)
-                    .HasConstraintName("FK__ProductIn__Produ__01D345B0");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ProductIn__Produ__269AB60B");
 
                 entity.HasOne(d => d.Receipt)
                     .WithMany(p => p.ProductInfo)
                     .HasForeignKey(d => d.ReceiptId)
-                    .HasConstraintName("FK__ProductIn__Recei__02C769E9");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ProductIn__Recei__278EDA44");
             });
 
             modelBuilder.Entity<Receipt>(entity =>
@@ -99,7 +114,8 @@ namespace MrRobotWebshop.Models
                 entity.HasOne(d => d.WebshopUser)
                     .WithMany(p => p.Receipt)
                     .HasForeignKey(d => d.WebshopUserId)
-                    .HasConstraintName("FK__Receipt__Webshop__7C1A6C5A");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Receipt__Webshop__20E1DCB5");
             });
 
             modelBuilder.Entity<SubCategory>(entity =>
@@ -115,7 +131,8 @@ namespace MrRobotWebshop.Models
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.SubCategory)
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK__SubCatego__Categ__7755B73D");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__SubCatego__Categ__1C1D2798");
             });
 
             modelBuilder.Entity<WebshopUser>(entity =>
