@@ -56,7 +56,7 @@ namespace MrRobotWebshop.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetWebshopUser([FromRoute] int id)
         {
-            var webshopUser = await db.WebshopUser.Include(s => s.Receipt).SingleAsync(s => s.WebshopUserId == id);
+            var webshopUser = await db.WebshopUser.Include(s => s.Receipt).SingleOrDefaultAsync(s => s.WebshopUserId == id);
 
             if (webshopUser == null)
             {
@@ -133,7 +133,7 @@ namespace MrRobotWebshop.Controllers
 
             await db.SaveChangesAsync();
 
-            return Ok("User has been deleted");
+            return Ok(string.Format("User '{0}' has been deleted", webshopUser.Username));
         }
 
         // PUT: api/WebshopUsers
@@ -189,7 +189,7 @@ namespace MrRobotWebshop.Controllers
                 }
             }
 
-            return Ok("User has been modified");
+            return Ok(string.Format("User '{0}' has been modified", webshopUser.Username));
         }
 
         // POST: api/WebshopUsers

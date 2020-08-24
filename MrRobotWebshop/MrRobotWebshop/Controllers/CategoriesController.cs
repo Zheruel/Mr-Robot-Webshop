@@ -36,18 +36,8 @@ namespace MrRobotWebshop.Controllers
                 {
                     CategoryId = category.CategoryId,
                     CategoryName = category.CategoryName,
-                    SubCategories = new List<SubCategoryViewModel>()
+                    SubCategoryCount = category.SubCategory.Count()
                 };
-
-                foreach (var subcategory in category.SubCategory)
-                {
-                    var viewSubCategory = new SubCategoryViewModel() { 
-                        SubCategoryId = subcategory.SubCategoryId,
-                        SubCategoryName = subcategory.SubCategoryName
-                    };
-
-                    viewCategory.SubCategories.Add(viewSubCategory);
-                }
 
                 viewCategoryList.Add(viewCategory);
             }
@@ -59,14 +49,33 @@ namespace MrRobotWebshop.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategory([FromRoute] int id)
         {
-            var category = await db.Category.FindAsync(id);
+            var category = await db.Category.Include(s => s.SubCategory).SingleAsync(s => s.CategoryId == id);
 
             if (category == null)
             {
                 return NotFound("There is no such category");
             }
 
-            return Ok(category);
+            var viewCategory = new CategoryViewModel() 
+            {
+                CategoryId = category.CategoryId,
+                CategoryName = category.CategoryName,
+                SubCategoryCount = category.SubCategory.Count(),
+                SubCategories = new List<SubCategoryViewModel>()
+            };
+
+            foreach(var subCategory in category.SubCategory)
+            {
+                var viewSubCategory = new SubCategoryViewModel()
+                {
+                    SubCategoryId = subCategory.SubCategoryId,
+                    SubCategoryName = subCategory.SubCategoryName
+                };
+
+                viewCategory.SubCategories.Add(viewSubCategory);
+            }
+
+            return Ok(viewCategory);
         }
 
         // POST: api/Categories
@@ -105,7 +114,7 @@ namespace MrRobotWebshop.Controllers
 
             await db.SaveChangesAsync();
 
-            return Ok("Category deleted");
+            return Ok(string.Format("Category '{0}' has been deleted", category.CategoryName));
         }
 
         // PUT: api/Categories
@@ -142,7 +151,7 @@ namespace MrRobotWebshop.Controllers
                 }
             }
 
-            return Ok("Category has been modified");
+            return Ok(string.Format("Category '{0}' has been modified", category.CategoryName));
         }
     }
 }
