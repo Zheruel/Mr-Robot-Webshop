@@ -11,13 +11,16 @@ Product
 -
 ProductID PK int
 ProductName string
+ProductDescription string
+Price decimal
+ImageURL string
 SubCategoryID int FK >- SubCategory.CategoryID
 
 ProductInfo
 -
 ProductInfoID PK int
-Price decmial
 Amount int
+Discount decimal
 ProductID int FK >- Product.ProductID
 ReceiptID int FK >- Receipt.ReceiptID
 

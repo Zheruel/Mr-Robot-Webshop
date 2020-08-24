@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using MrRobotWebshop.Models;
 
@@ -16,12 +17,7 @@ namespace MrRobotWebshop.Controllers
         [HttpGet]
         public async Task<IActionResult> GetSubCategory()
         {
-            var subCategoryList = await db.SubCategory.ToListAsync();
-
-            if (!subCategoryList.Any())
-            {
-                return NotFound("There are no subcategories in the databse");
-            }
+            var subCategoryList = await db.SubCategory.Include(s => s.Category).ToListAsync();
 
             return Ok(subCategoryList);
         }
@@ -49,19 +45,20 @@ namespace MrRobotWebshop.Controllers
                 return BadRequest(ModelState);
             }
 
+            var targetCategory = db.Category.Find(subCategory.CategoryId);
+
+            if (targetCategory == null)
+            {
+                return BadRequest("There is no such category");
+            }
+
+            subCategory.Category = targetCategory;
+
             db.SubCategory.Add(subCategory);
 
-            try
-            {
-                await db.SaveChangesAsync();
-            }
+            await db.SaveChangesAsync();
 
-            catch (DbUpdateException)
-            {
-                return new ObjectResult("Internal server error - Database related problem") { StatusCode = 500 };
-            }
-
-            return CreatedAtAction("GetSubCategory", new { id = subCategory.SubCategoryId }, subCategory);
+            return Ok("Added");
         }
 
         // DELETE: api/SubCategories/5
@@ -77,15 +74,7 @@ namespace MrRobotWebshop.Controllers
 
             db.SubCategory.Remove(subCategory);
 
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-
-            catch (DbUpdateException)
-            {
-                return new ObjectResult("Internal server error - Database related problem") { StatusCode = 500 };
-            }
+            await db.SaveChangesAsync();
 
             return Ok("Subcategory removed");
         }

@@ -39,7 +39,7 @@ CREATE TABLE Category (
 CREATE TABLE SubCategory (
     SubCategoryID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     SubCategoryName VARCHAR(255),
-    CategoryID INT FOREIGN KEY REFERENCES Category(CategoryID)
+    CategoryID INT NOT NULL FOREIGN KEY REFERENCES Category(CategoryID)
 );
 
 CREATE TABLE WebshopUser (
@@ -55,19 +55,22 @@ CREATE TABLE Receipt (
     ReceiptID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     Status VARCHAR(255),
     FinalPrice VARCHAR(255),
-    WebshopUserID INT FOREIGN KEY REFERENCES WebshopUser(WebshopUserID)
+    WebshopUserID INT NOT NULL FOREIGN KEY REFERENCES WebshopUser(WebshopUserID)
 );
 
 CREATE TABLE Product (
     ProductID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     ProductName VARCHAR(255),
-    SubCategoryID INT FOREIGN KEY REFERENCES SubCategory(SubCategoryID)
+    ProductDescription VARCHAR(255),
+    Price DECIMAL,
+    ImageURL VARCHAR(255),
+    SubCategoryID INT NOT NULL FOREIGN KEY REFERENCES SubCategory(SubCategoryID)
 );
 
 CREATE TABLE ProductInfo (
     ProductInfoID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-    Price DECIMAL,
     Amount INT,
-    ProductID INT FOREIGN KEY REFERENCES Product(ProductID),
-    ReceiptID INT FOREIGN KEY REFERENCES Receipt(ReceiptID)
+    Discount DECIMAL,
+    ProductID INT NOT NULL FOREIGN KEY REFERENCES Product(ProductID),
+    ReceiptID INT NOT NULL FOREIGN KEY REFERENCES Receipt(ReceiptID)
 );

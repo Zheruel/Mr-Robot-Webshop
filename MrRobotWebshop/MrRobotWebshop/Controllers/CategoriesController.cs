@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 using Microsoft.EntityFrameworkCore;
 using MrRobotWebshop.Models;
+using MrRobotWebshop.ViewModels;
 
 namespace MrRobotWebshop.Controllers
 {
@@ -19,14 +21,38 @@ namespace MrRobotWebshop.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCategories()
         {
-            var categoryList = await db.Category.ToListAsync();
+            var categoryList = await db.Category.Include(s => s.SubCategory).ToListAsync();
 
             if (!categoryList.Any())
             {
                 return NotFound("There are no categories in the database");
             }
 
-            return Ok(categoryList);
+            var viewCategoryList = new List<CategoryViewModel>();
+
+            foreach (var category in categoryList)
+            {
+                var viewCategory = new CategoryViewModel()
+                {
+                    CategoryId = category.CategoryId,
+                    CategoryName = category.CategoryName,
+                    SubCategories = new List<SubCategoryViewModel>()
+                };
+
+                foreach (var subcategory in category.SubCategory)
+                {
+                    var viewSubCategory = new SubCategoryViewModel() { 
+                        SubCategoryId = subcategory.SubCategoryId,
+                        SubCategoryName = subcategory.SubCategoryName
+                    };
+
+                    viewCategory.SubCategories.Add(viewSubCategory);
+                }
+
+                viewCategoryList.Add(viewCategory);
+            }
+
+            return Ok(viewCategoryList);
         }
 
         // GET: api/Categories/{id}
@@ -47,6 +73,11 @@ namespace MrRobotWebshop.Controllers
         [HttpPost]
         public async Task<IActionResult> PostCategory([FromForm] Category category)
         {
+            if (db.Category.Any(s => s.CategoryName == category.CategoryName))
+            {
+                ModelState.AddModelError(string.Empty, "Category name is already taken");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -54,17 +85,9 @@ namespace MrRobotWebshop.Controllers
 
             db.Category.Add(category);
 
-            try
-            {
-                await db.SaveChangesAsync();
-            }
+            await db.SaveChangesAsync();
 
-            catch (DbUpdateException)
-            {
-                return new ObjectResult("Internal server error - Database related problem") { StatusCode = 500 };
-            }
-
-            return CreatedAtAction("GetCategory", new { id = category.CategoryId }, category);
+            return Ok(string.Format("Category '{0}' has been created", category.CategoryName));
         }
 
         // DELETE: api/Categories/{id}
@@ -80,15 +103,7 @@ namespace MrRobotWebshop.Controllers
 
             db.Category.Remove(category);
 
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-
-            catch (DbUpdateException)
-            {
-                return new ObjectResult("Internal server error - Database related problem") { StatusCode = 500 };
-            }
+            await db.SaveChangesAsync();
 
             return Ok("Category deleted");
         }
@@ -97,6 +112,11 @@ namespace MrRobotWebshop.Controllers
         [HttpPut]
         public async Task<IActionResult> PutCategory([FromForm] Category category)
         {
+            if (db.Category.Any(s => s.CategoryName == category.CategoryName && s.CategoryId != category.CategoryId))
+            {
+                ModelState.AddModelError(string.Empty, "Category name is already taken");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

@@ -24,28 +24,57 @@ namespace MrRobotWebshop.Controllers
         [HttpGet]
         public async Task<IActionResult> GetWebshopUsers()
         {
-            var userList = await db.WebshopUser.ToListAsync();
+            var userList = await db.WebshopUser.Include(s => s.Receipt).ToListAsync();
 
-            if(!userList.Any())
+            if (!userList.Any())
             {
                 return NotFound("There are no users in the database");
             }
 
-            return Ok(userList);
+            var viewUserList = new List<WebshopUserViewModel>();
+
+            foreach (var user in userList)
+            {
+                WebshopUserViewModel viewUser = new WebshopUserViewModel()
+                {
+                    WebshopUserId = user.WebshopUserId,
+                    Username = user.Username,
+                    Password = user.Password,
+                    Salt = user.Salt,
+                    Firstname = user.Firstname,
+                    Lastname = user.Lastname,
+                    ReceiptCount = user.Receipt.Count()
+                };
+
+                viewUserList.Add(viewUser);
+            }
+
+            return Ok(viewUserList);
         }
 
         // GET: api/WebshopUsers/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetWebshopUser([FromRoute] int id)
         {
-            var webshopUser = await db.WebshopUser.FindAsync(id);
+            var webshopUser = await db.WebshopUser.Include(s => s.Receipt).SingleAsync(s => s.WebshopUserId == id);
 
             if (webshopUser == null)
             {
                 return NotFound("There is no such user");
             }
 
-            return Ok(webshopUser);
+            WebshopUserViewModel viewUser = new WebshopUserViewModel()
+            {
+                WebshopUserId = webshopUser.WebshopUserId,
+                Username = webshopUser.Username,
+                Password = webshopUser.Password,
+                Salt = webshopUser.Salt,
+                Firstname = webshopUser.Firstname,
+                Lastname = webshopUser.Lastname,
+                ReceiptCount = webshopUser.Receipt.Count()
+            };
+
+            return Ok(viewUser);
         }
 
         // POST: api/WebshopUsers
@@ -84,17 +113,9 @@ namespace MrRobotWebshop.Controllers
 
             db.WebshopUser.Add(webshopUser);
 
-            try
-            {
-                await db.SaveChangesAsync();
-            }
+            await db.SaveChangesAsync();
 
-            catch (DbUpdateException)
-            {
-                return new ObjectResult("Internal server error - Database related problem") { StatusCode = 500 };
-            }
-
-            return CreatedAtAction("GetWebshopUser", new { id = webshopUser.WebshopUserId }, webshopUser);
+            return Ok(string.Format("User '{0}' has been created", webshopUser.Username));
         }
 
         // DELETE: api/WebshopUsers/5
@@ -110,15 +131,7 @@ namespace MrRobotWebshop.Controllers
 
             db.WebshopUser.Remove(webshopUser);
 
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-
-            catch (DbUpdateException)
-            {
-                return new ObjectResult("Internal server error - Database related problem") { StatusCode = 500 };
-            }
+            await db.SaveChangesAsync();
 
             return Ok("User has been deleted");
         }
@@ -127,6 +140,11 @@ namespace MrRobotWebshop.Controllers
         [HttpPut]
         public async Task<IActionResult> PutWebshopUser([FromForm] WebshopUser webshopUser)
         {
+            if (db.WebshopUser.Any(s => s.Username == webshopUser.Username && s.WebshopUserId != webshopUser.WebshopUserId))
+            {
+                ModelState.AddModelError(string.Empty, "Username is already taken");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
