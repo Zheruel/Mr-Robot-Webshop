@@ -83,6 +83,11 @@ namespace MrRobotWebshop.Controllers
         [HttpPost]
         public async Task<IActionResult> PostSubCategory([FromForm] SubCategory subCategory)
         {
+            if (db.SubCategory.Any(s => s.SubCategoryName == subCategory.SubCategoryName))
+            {
+                ModelState.AddModelError(string.Empty, "Subcategory name is already taken");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -92,7 +97,7 @@ namespace MrRobotWebshop.Controllers
 
             if (targetCategory == null)
             {
-                return BadRequest("There is no such category");
+                return BadRequest("There is no such category so I can't add a subcategory to it");
             }
 
             subCategory.Category = targetCategory;

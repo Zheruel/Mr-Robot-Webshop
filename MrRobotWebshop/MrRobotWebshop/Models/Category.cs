@@ -11,6 +11,8 @@ namespace MrRobotWebshop.Models
         }
 
         public int CategoryId { get; set; }
+
+        [Required]
         public string CategoryName { get; set; }
 
         public ICollection<SubCategory> SubCategory { get; set; }
