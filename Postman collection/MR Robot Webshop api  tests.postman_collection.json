@@ -1,0 +1,367 @@
+{
+	"info": {
+		"_postman_id": "164342e7-fe4c-40ac-8b9c-60c88305371b",
+		"name": "MR Robot Webshop api  tests",
+		"description": "Testing if the .net core web api works as expected",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Post user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "Username",
+							"value": "test",
+							"type": "text"
+						},
+						{
+							"key": "Password",
+							"value": "test",
+							"type": "text"
+						},
+						{
+							"key": "Firstname",
+							"value": "test",
+							"type": "text"
+						},
+						{
+							"key": "Lastname",
+							"value": "test",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44316/api/webshopusers",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44316",
+					"path": [
+						"api",
+						"webshopusers"
+					]
+				},
+				"description": "Add user to DB"
+			},
+			"response": []
+		},
+		{
+			"name": "Get all users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44316/api/webshopusers",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44316",
+					"path": [
+						"api",
+						"webshopusers"
+					]
+				},
+				"description": "Gets all users from the database"
+			},
+			"response": []
+		},
+		{
+			"name": "Get user with ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44316/api/webshopusers/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44316",
+					"path": [
+						"api",
+						"webshopusers",
+						"1"
+					]
+				},
+				"description": "Get specific user"
+			},
+			"response": []
+		},
+		{
+			"name": "Login to account",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "Username",
+							"value": "test",
+							"type": "text"
+						},
+						{
+							"key": "Password",
+							"value": "test",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44316/api/WebshopUsers/login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44316",
+					"path": [
+						"api",
+						"WebshopUsers",
+						"login"
+					]
+				},
+				"description": "Logs into account"
+			},
+			"response": []
+		},
+		{
+			"name": "Change user with ID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "WebShopuserID",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "Username",
+							"value": "test2",
+							"type": "text"
+						},
+						{
+							"key": "Password",
+							"value": "test2",
+							"type": "text"
+						},
+						{
+							"key": "Firstname",
+							"value": "test2",
+							"type": "text"
+						},
+						{
+							"key": "Lastname",
+							"value": "test2",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44316/api/webshopusers",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44316",
+					"path": [
+						"api",
+						"webshopusers"
+					]
+				},
+				"description": "Changes information about the specified user"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user with ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44316/api/webshopusers/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44316",
+					"path": [
+						"api",
+						"webshopusers",
+						"1"
+					]
+				},
+				"description": "Deletes the specified user"
+			},
+			"response": []
+		},
+		{
+			"name": "Get all categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44316/api/categories",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44316",
+					"path": [
+						"api",
+						"categories"
+					]
+				},
+				"description": "Gets all the categories from the database"
+			},
+			"response": []
+		},
+		{
+			"name": "Get category with ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44316/api/categories/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44316",
+					"path": [
+						"api",
+						"categories",
+						"1"
+					]
+				},
+				"description": "Gets a specific category with specified ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Post category",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "CategoryName",
+							"value": "test",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44316/api/categories",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44316",
+					"path": [
+						"api",
+						"categories"
+					]
+				},
+				"description": "Adds a category to the database"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete category with ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44316/api/categories/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44316",
+					"path": [
+						"api",
+						"categories",
+						"1"
+					]
+				},
+				"description": "Deletes the category with the specified ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Change category with ID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "CategoryId",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "CategoryName",
+							"value": "test2",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44316/api/categories",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44316",
+					"path": [
+						"api",
+						"categories"
+					]
+				},
+				"description": "Changes the category with the specified ID"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

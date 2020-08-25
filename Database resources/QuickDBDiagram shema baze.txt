@@ -1,0 +1,43 @@
+WebshopUser
+-
+WebshopUserID PK int
+Username string
+Password string
+Salt string
+Firstname string
+Lastname string
+
+Product
+-
+ProductID PK int
+ProductName string
+ProductDescription string
+Price decimal
+ImageURL string
+SubCategoryID int FK >- SubCategory.CategoryID
+
+ProductInfo
+-
+ProductInfoID PK int
+Amount int
+Discount decimal
+ProductID int FK >- Product.ProductID
+ReceiptID int FK >- Receipt.ReceiptID
+
+Receipt
+-
+ReceiptID PK int
+Status string
+FinalPrice string
+WebShopUserID int FK >- WebshopUser.WebshopUserID
+
+Category
+-
+CategoryID PK int
+CategoryName string
+
+SubCategory
+-
+SubCategoryID PK int
+SubCategoryName string
+CategoryID int FK >- Category.CategoryID
