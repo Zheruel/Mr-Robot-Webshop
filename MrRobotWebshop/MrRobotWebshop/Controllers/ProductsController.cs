@@ -154,10 +154,8 @@ namespace MrRobotWebshop.Controllers
 
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    viewProduct.ProfileImage.CopyTo(fileStream);
-                }
+                using FileStream fileStream = new FileStream(filePath, FileMode.Create);
+                viewProduct.ProfileImage.CopyTo(fileStream);
             }
 
             return uniqueFileName;
