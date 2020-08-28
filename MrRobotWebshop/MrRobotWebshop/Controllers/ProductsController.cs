@@ -103,8 +103,8 @@ namespace MrRobotWebshop.Controllers
         }
 
         // PUT: api/Products/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct([FromRoute] int id, [FromBody] Product product)
+        [HttpPut]
+        public async Task<IActionResult> PutProduct([FromForm] Product product)
         {
             if (db.Product.Any(s => s.ProductName == product.ProductName && s.ProductId != product.ProductId))
             {
@@ -114,11 +114,6 @@ namespace MrRobotWebshop.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }
-
-            if (id != product.ProductId)
-            {
-                return BadRequest();
             }
 
             db.Entry(product).State = EntityState.Modified;
