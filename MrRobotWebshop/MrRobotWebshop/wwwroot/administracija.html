@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <meta name="description" content="Tin Zeljar - Portfolio" />
-    <meta name="author" content="Tin Zeljar" />
 
     <title>Mr. Robot Webshop</title>
 
@@ -23,7 +20,10 @@
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
 
-    <link href="css/resume.min.css" rel="stylesheet" />
+    <link href="css/resume.css" rel="stylesheet" />
+    
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.21/af-2.3.5/b-1.6.3/r-2.2.5/datatables.min.css"/>
   </head>
 
   <body id="page-top">
@@ -54,8 +54,8 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#about">About</a>
+          <li class="nav-item" id="manageCategories">
+            <a class="nav-link">Manage categories</a>
           </li>
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#education"
@@ -77,28 +77,49 @@
       </div>
     </nav>
 
-    <div class="container-fluid p-0">
-      <section
-        class="resume-section p-3 p-lg-5 d-flex align-items-center"
-        id="about"
-      >
-        <div class="gui">
-          <p class="lead mb-5">
-            I am a Junior Software Developer working to build a long and
-            prosperous career in the field of Information Technology.
-          </p>
-        </div>
-      </section>
+    <div class="container-fluid" id="guiContent">
+      <table class="table" id="myTable">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+            <th scope="col">#</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+            <td><button type="button" class="btn btn-primary">Primary</button></td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+            <td><button class="button">123</button></td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>Larry</td>
+            <td>the Bird</td>
+            <td>@twitter</td>
+            <td><button class="button">123</button></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.21/af-2.3.5/b-1.6.3/r-2.2.5/datatables.min.js"></script>
 
-    <!-- Plugin JavaScript -->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for this template -->
-    <script src="js/resume.min.js"></script>
+    <!-- Jquery -->
+    <script src="js/main.js"></script>
   </body>
 </html>
