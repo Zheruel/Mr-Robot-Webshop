@@ -112,6 +112,7 @@ namespace MrRobotWebshop.Controllers
             }
 
             //remove subcategories linked then category
+            db.Product.RemoveRange(db.Product.Where(s => s.SubCategory.CategoryId == id));
             db.SubCategory.RemoveRange(db.SubCategory.Where(s => s.CategoryId == id));
             db.Category.Remove(category);
 
