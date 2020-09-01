@@ -11,7 +11,7 @@ body {
 }
 
 #guiContent{
-  margin-top: 10em;
+  margin-top: 1em;
 }
 
 @media (min-width: 992px) {

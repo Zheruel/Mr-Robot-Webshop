@@ -37,7 +37,7 @@ namespace MrRobotWebshop.Controllers
                 {
                     CategoryId = category.CategoryId,
                     CategoryName = category.CategoryName,
-                    SubCategoryCount = category.SubCategory.Count()
+                    ProductCount = db.Product.Count(s => s.SubCategory.CategoryId == category.CategoryId)
                 };
 
                 viewCategoryList.Add(viewCategory);
@@ -61,7 +61,7 @@ namespace MrRobotWebshop.Controllers
             {
                 CategoryId = category.CategoryId,
                 CategoryName = category.CategoryName,
-                SubCategoryCount = category.SubCategory.Count(),
+                ProductCount = db.Product.Count(s => s.SubCategory.CategoryId == category.CategoryId),
                 SubCategories = new List<SubCategoryViewModel>()
             };
 

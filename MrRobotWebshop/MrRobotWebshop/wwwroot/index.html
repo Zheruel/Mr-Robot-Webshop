@@ -34,14 +34,6 @@
     >
       <a class="navbar-brand js-scroll-trigger" href="#page-top">
         <span class="d-block d-lg-none">Mr robot webshop</span>
-        <span class="d-none d-lg-block">
-          <p>Admin panel</p>
-          <img
-            class="img-fluid img-profile rounded-circle mx-auto mb-2"
-            src="img/profile.png"
-            alt=""
-          />
-        </span>
       </a>
       <button
         class="navbar-toggler"
@@ -55,59 +47,12 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav">
-          <li class="nav-item" id="manageCategories">
-            <a class="nav-link">Manage categories</a>
-          </li>
-          <li class="nav-item" id="manageSubCategories">
-            <a class="nav-link">Manage subcategories</a>
-          </li>
-          <li class="nav-item" id="manageProducts">
-            <a class="nav-link">Manage products</a>
-          </li>
-          <li class="nav-item" id="manageCategories">
-            <a class="nav-link">Manage users</a>
-          </li>
+        <ul class="navbar-nav" id="categoryList">
         </ul>
       </div>
     </nav>
 
-    <div class="container-fluid" id="guiContent">
-      <table class="table" id="myTable">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-            <th scope="col">#</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td><button type="button" class="btn btn-primary">Primary</button></td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-            <td><button class="button">123</button></td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-            <td><button class="button">123</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <div class="container-fluid" id="guiContent"></div>
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -115,7 +60,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.21/af-2.3.5/b-1.6.3/r-2.2.5/datatables.min.js"></script>
 
     <!-- Jquery -->
-    <script src="js/adminMain.js"></script>
+    <script src="js/main.js"></script>
     <script src="js/jquery-ui.js"></script>
   </body>
 </html>
