@@ -13,7 +13,7 @@ Step 1: Import dumped database under /database resources
 
 Step 2: Start .NET Core backend
 
-Step 3: Open html file or run html on local server and enjoy
+Step 3: Run HTML files on local server using "Live Server" extension for visual studio code
 
 Additional: import Postman collection to play with more backend options
 
