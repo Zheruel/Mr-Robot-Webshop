@@ -6,8 +6,6 @@ function drawHome() {
     success: function (products) {
       $("#guiContent").empty();
 
-      console.log(products);
-
       $("#guiContent").append(
         $("<table/>")
           .attr({
@@ -56,9 +54,7 @@ function drawHome() {
           url:
             "https://localhost:44316/api/categories/" +
             $(this).attr("categoryId"),
-          success: function (response) {
-            console.log(response);
-          },
+          success: function (response) {},
         });
 
         $(this.parentElement.parentElement).remove();
@@ -78,7 +74,9 @@ function drawHome() {
 }
 
 function drawAddCategoryForm() {
-  $("#guiContent").append(
+  $("#formContent").empty();
+  
+  $("#formContent").append(
     $("<form/>")
       .attr({
         id: "popupForm",

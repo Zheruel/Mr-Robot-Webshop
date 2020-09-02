@@ -28,8 +28,16 @@
       url: "https://localhost:44316/api/categories",
       data: data,
       success: function (response) {
+        $("#formContent").empty();
+
         drawHome();
-      }
+      },
+      error: function (response) {
+        $("#popupForm p").remove();
+        $("#popupForm").append(
+          $("<p>").attr("style", "color: red;").text("Category name already exists")
+        );
+      },
     });
   });
 
