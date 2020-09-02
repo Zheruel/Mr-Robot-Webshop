@@ -1,2 +1,5 @@
 # Mr-Robot-Webshop
-Webshop using .net core as the backed and Jquery as the backend
+
+Concept of a webshop created using modern technologies. 
+It uses .NET core as the backend, MS SQL Server 2019 for the database and Jquery as the backend
+
