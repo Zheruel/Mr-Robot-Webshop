@@ -12,7 +12,7 @@ namespace MrRobotWebshop.ViewModels
 
         public string CategoryName { get; set; }
 
-        public int SubCategoryCount { get; set; }
+        public int ProductCount { get; set; }
 
         public List<SubCategoryViewModel> SubCategories { get; set; }
     }

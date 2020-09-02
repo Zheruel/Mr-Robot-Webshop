@@ -18,19 +18,6 @@ drop table WebShopUser;
 -- CREATE DATABASE MrRobotWebshopDB
 -- GO
 
--- Create a new database called 'MrRobotWebshopDB'
--- Connect to the 'master' database to run this snippet
--- USE master
--- GO
--- Create the new database if it does not exist already
--- IF NOT EXISTS (
-    -- SELECT name
-        -- FROM sys.databases
-        -- WHERE name = 'MrRobotWebshopDB'
--- )
--- CREATE DATABASE MrRobotWebshopDB
--- GO
-
 CREATE TABLE Category (
     CategoryID INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     CategoryName VARCHAR(255),

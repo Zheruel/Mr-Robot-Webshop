@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 using Microsoft.EntityFrameworkCore;
 using MrRobotWebshop.Models;
 using MrRobotWebshop.ViewModels;
+using MrRobotWebshop.Controllers;
 
 namespace MrRobotWebshop.Controllers
 {
@@ -36,7 +37,7 @@ namespace MrRobotWebshop.Controllers
                 {
                     CategoryId = category.CategoryId,
                     CategoryName = category.CategoryName,
-                    SubCategoryCount = category.SubCategory.Count()
+                    ProductCount = db.Product.Count(s => s.SubCategory.CategoryId == category.CategoryId)
                 };
 
                 viewCategoryList.Add(viewCategory);
@@ -60,7 +61,7 @@ namespace MrRobotWebshop.Controllers
             {
                 CategoryId = category.CategoryId,
                 CategoryName = category.CategoryName,
-                SubCategoryCount = category.SubCategory.Count(),
+                ProductCount = db.Product.Count(s => s.SubCategory.CategoryId == category.CategoryId),
                 SubCategories = new List<SubCategoryViewModel>()
             };
 
@@ -110,6 +111,9 @@ namespace MrRobotWebshop.Controllers
                 return NotFound("There is no such category");
             }
 
+            //remove subcategories linked then category
+            db.Product.RemoveRange(db.Product.Where(s => s.SubCategory.CategoryId == id));
+            db.SubCategory.RemoveRange(db.SubCategory.Where(s => s.CategoryId == id));
             db.Category.Remove(category);
 
             await db.SaveChangesAsync();

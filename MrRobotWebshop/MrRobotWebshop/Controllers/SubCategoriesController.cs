@@ -79,10 +79,43 @@ namespace MrRobotWebshop.Controllers
             return Ok(viewSubCategory);
         }
 
+        // GET: api/SubCategories
+        [HttpGet("category/{id}")]
+        public async Task<IActionResult> GetSubCategoryByCategory([FromRoute] int id)
+        {
+            var subCategoryList = await db.SubCategory.Include(s => s.Product).Where(s => s.CategoryId == id).ToListAsync();
+
+            if (!subCategoryList.Any())
+            {
+                return NotFound("There are no such subcategories");
+            }
+
+            var viewSubCategoryList = new List<SubCategoryViewModel>();
+
+            foreach(var subCategory in subCategoryList)
+            {
+                var viewSubCategory = new SubCategoryViewModel()
+                {
+                    SubCategoryId = subCategory.SubCategoryId,
+                    SubCategoryName = subCategory.SubCategoryName,
+                    ProductCount = subCategory.Product.Count,
+                };
+
+                viewSubCategoryList.Add(viewSubCategory);
+            }
+
+            return Ok(viewSubCategoryList);
+        }
+
         // POST: api/SubCategories
         [HttpPost]
         public async Task<IActionResult> PostSubCategory([FromForm] SubCategory subCategory)
         {
+            if (db.SubCategory.Any(s => s.SubCategoryName == subCategory.SubCategoryName))
+            {
+                ModelState.AddModelError(string.Empty, "Subcategory name is already taken");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -92,7 +125,7 @@ namespace MrRobotWebshop.Controllers
 
             if (targetCategory == null)
             {
-                return BadRequest("There is no such category");
+                return BadRequest("There is no such category so I can't add a subcategory to it");
             }
 
             subCategory.Category = targetCategory;
