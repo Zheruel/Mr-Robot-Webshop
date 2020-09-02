@@ -61,6 +61,20 @@ namespace MrRobotWebshop.Controllers
             return Ok(productList);
         }
 
+        // GET: api/products/subcategory/id
+        [HttpGet("subcategory/{id}")]
+        public async Task<IActionResult> GetProductBySubCategory([FromRoute] int id)
+        {
+            var productList = await db.Product.Where(s => s.SubCategoryId == id).ToListAsync();
+
+            if (!productList.Any())
+            {
+                return NotFound("There are no such products");
+            }
+
+            return Ok(productList);
+        }
+
         // POST: api/Products
         [HttpPost]
         public async Task<IActionResult> PostProduct([FromForm] ProductViewModel viewProduct)

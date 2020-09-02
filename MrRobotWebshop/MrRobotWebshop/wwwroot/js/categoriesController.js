@@ -4,6 +4,8 @@ function drawHome() {
     type: "GET",
     url: "https://localhost:44316/api/categories",
     success: function (categories) {
+      $("#categoryList").empty();
+
       for (const category of categories) {
         $("#categoryList").append(
           $("<li/>")
@@ -35,14 +37,12 @@ function drawHome() {
   });
 }
 
-//Sorting by product
-$(document).on("click", "[navItemType = 'category']", function () {
-  var categoryId = this.id;
-
+function sortByCategory(categoryId) {
   $.ajax({
     type: "GET",
     url: "https://localhost:44316/api/products/category/" + categoryId,
     success: function (products) {
+      //draw filtered products
       drawProducts(products);
 
       //Clear menu
@@ -59,6 +59,7 @@ $(document).on("click", "[navItemType = 'category']", function () {
                 .attr({
                   class: "nav-item",
                   id: subCategory.subCategoryId,
+                  navItemType: "subCategory",
                 })
                 .append(
                   $("<a/>")
@@ -76,9 +77,8 @@ $(document).on("click", "[navItemType = 'category']", function () {
       });
     },
   });
-});
+}
 
-//Draw products table
 function drawProducts(products) {
   $("#guiContent").empty();
 
@@ -121,4 +121,18 @@ function drawProducts(products) {
   }
 
   $("#productTable").DataTable();
+}
+
+function sortBySubCategory(subCategoryId) {
+  $.ajax({
+    type: "GET",
+    url: "https://localhost:44316/api/products/subcategory/" + subCategoryId,
+    success: function (products) {
+      //draw filtered products
+      drawProducts(products);
+
+      //Clear menu
+      $("#categoryList").empty();
+    },
+  });
 }

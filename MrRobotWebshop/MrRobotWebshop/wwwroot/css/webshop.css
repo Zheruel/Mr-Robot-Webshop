@@ -14,6 +14,10 @@ body {
   margin-top: 1em;
 }
 
+#quitAddCategoryButton:hover{
+  color: darkred;
+}
+
 @media (min-width: 992px) {
   body {
     padding-top: 0;
