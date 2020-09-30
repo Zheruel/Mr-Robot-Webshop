@@ -6,6 +6,4 @@ It uses MS SQL Server 2019 as the database and Entity Framework to communicate w
 The backend is created using .NET Core.
 
 The frontend is created using HTML/CSS (Bootstrap, FontAwesome), Javascript and JQuery. 
-![](firstdemonstration.gif)
-
-![](seconddemonstration.gif)
+![](webshopdemo.gif)
