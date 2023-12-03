@@ -1,14 +1,15 @@
 # Mr-Robot-Webshop
 
-Webshop created using modern technologies. 
-It uses MS SQL Server 2019 as the database and Entity Framework to communicate with it in the backend.
+Important note: this is a very old project written for my bachelor's thesis.
+It doesn't reflect my current skill-set and is not being actively maintained.
 
-The backend is created using .NET Core.
+Simple webshop application
 
-The frontend is created using HTML/CSS (Bootstrap, FontAwesome), Javascript and JQuery. 
+It uses MS SQL Server 2019 and Entity Framework as the orm.
 
-If you understand Croatian and want to read the seminar it is available here:
-https://docs.google.com/document/d/1U65I8oJdH2-q8ZfGdW-ch1LzSc-LAOjqcYXwpidKxiE/edit?usp=sharing
+The back-end is written in .NET Core (with C#).
+
+The front-end is written in simple HTML/CSS with JavasScript and JQuery.
 
 ![](image1.JPG)
 ![](image2.JPG)
